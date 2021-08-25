@@ -13,7 +13,7 @@ interface NavProps {
   path: string,
   name: string,
   key: string,
-  id: number,
+  id: number | string,
   children?: Array<NavProps>,
   icon?: React.ReactNode
 }
@@ -27,15 +27,15 @@ export default class Index extends React.Component<any> {
     {
       path: '/index/table',
       name: '数据统计',
-      key: 'index',
-      id: 1,
+      key: 'table',
+      id: 'table',
       icon: <TableOutlined />
     },
     {
       path: '/index/testing',
       name: '逐步检测',
       key: 'testing',
-      id: 2,
+      id: 'testing',
       icon: <ApiOutlined />
     }
   ]
@@ -129,7 +129,7 @@ export default class Index extends React.Component<any> {
                     return (
                       <SubRoute
                         {...item}
-                        key={'tabPage_' + item.id}
+                        key={item.id}
                         path={item.path}
                         changePath={this.changePath.bind(this)}
                       />
