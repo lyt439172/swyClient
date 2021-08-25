@@ -387,6 +387,7 @@ module.exports = function (webpackEnv) {
               options: {
                 limit: imageInlineSizeLimit,
                 name: 'static/media/[name].[hash:8].[ext]',
+                esModule: false,
               },
             },
             // Process application JS with Babel.
@@ -668,6 +669,10 @@ module.exports = function (webpackEnv) {
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // new webpack.ContextReplacementPlugin(
+      //   /moment[\\\/]locale$/,
+      //   /^\.\/(zh-cn)$/
+      // ),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       isEnvProduction &&

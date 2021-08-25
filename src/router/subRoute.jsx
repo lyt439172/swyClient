@@ -10,9 +10,11 @@ export const SubRoute = (route) => {
       render={(props) => 
         <route.component
           name={route.name}
+          key={route.id}
           id={route.id}
           {...props}
           routes={route.routes || []}
+          changePath={route.changePath}
         />
       }
     />

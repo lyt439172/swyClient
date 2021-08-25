@@ -1,8 +1,9 @@
 import React from 'react';
-import {Switch} from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import {routeConfig} from './router';
 import {SubRoute} from './subRoute';
-export const MyRouter = function() {
+
+export const Root = function() {
   return (
     <Switch>
       {

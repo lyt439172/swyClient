@@ -1,12 +1,13 @@
 import React from 'react';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Layout } from 'antd';
 import { Switch } from 'react-router-dom';
-import { PieChartOutlined, LogoutOutlined, TableOutlined, AppstoreOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
+import { LogoutOutlined, TableOutlined, ApiOutlined, SettingOutlined } from '@ant-design/icons';
 import './index.scss';
 import { RouteConfigProps } from '../../router/router';
 import { SubRoute } from '../../router/subRoute';
 
 const { SubMenu } = Menu;
+const { Header, Sider, Content } = Layout;
 
 interface NavProps {
   path: string,
@@ -24,41 +25,18 @@ export default class Index extends React.Component<any> {
 
   navMenu: Array<NavProps> = [
     {
-      path: '/index/charts',
+      path: '/index/table',
       name: '数据统计',
       key: 'index',
       id: 1,
-      icon: <PieChartOutlined />
-    },
-    {
-      path: '/index/table',
-      name: '表格列表',
-      key: 'table',
-      id: 2,
       icon: <TableOutlined />
     },
     {
-      path: '/index',
-      name: '个人中心',
-      key: 'user',
-      id: 3,
-      icon: <AppstoreOutlined />,
-      children: [
-        {
-          path: '/index/userCenter',
-          name: '个人中心',
-          key: 'userCenter',
-          id: 31,
-          icon: <UserOutlined />
-        },
-        {
-          path: '/index/userSetting',
-          name: '个人设置',
-          id: 32,
-          icon: <SettingOutlined />,
-          key: 'userSetting'
-        }
-      ]
+      path: '/index/testing',
+      name: '逐步检测',
+      key: 'testing',
+      id: 2,
+      icon: <ApiOutlined />
     }
   ]
 
@@ -110,21 +88,6 @@ export default class Index extends React.Component<any> {
     const dropMenu = (
       <Menu>
         <Menu.Item
-          onClick={() => this.changePath({key: 'userCenter', path: '/index/userCenter'})}
-          key={'userCenter'}
-          icon={<UserOutlined />}
-        >
-          个人中心
-        </Menu.Item>
-        <Menu.Item
-          onClick={() => this.changePath({key: 'userSetting', path: '/index/userSetting'})}
-          key={'userSetting'}
-          icon={<SettingOutlined />}
-        >
-          个人设置
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item
           onClick={() => this.changePath({key: '', path: '/login'})}
           key={'logout'}
           icon={<LogoutOutlined />}
@@ -134,42 +97,50 @@ export default class Index extends React.Component<any> {
       </Menu>
     )
     return (
-      <div className="index">
-        <div className="left-nav">
-          <Menu
-            mode="inline"
-            theme="dark"
-            selectedKeys={[menuKey]}
-          >
-            {this.renderNav(this.navMenu)}
-          </Menu>
-        </div>
-        <div className="container">
-          <div className="top-nav">
-            <Dropdown overlay={dropMenu}>
-              <div>
-                <UserOutlined />
-                个人中心
-              </div>
+        <Layout className="index">
+          <Header className="header">
+            <div>
+              SWY-II型水位仪故障检测系统
+            </div>
+            <Dropdown overlay={dropMenu} trigger={['click']}>
+              <SettingOutlined />
             </Dropdown>
-          </div>
-          <div className="content">
-            <Switch>
-              {
-                this.props.routes.map((item: RouteConfigProps) => {
-                  return (
-                    <SubRoute
-                      {...item}
-                      key={item.id}
-                      path={item.path}
-                    />
-                  )
-                })
-              }
-            </Switch>
-          </div>
-        </div>
-      </div>
+          </Header>
+          <Layout>
+            <Sider className="sider">
+              <Menu
+                mode="inline"
+                theme="dark"
+                selectedKeys={[menuKey]}
+              >
+                {this.renderNav(this.navMenu)}
+              </Menu>
+              <div className="footer">
+                <div>研制单位：辽宁省地震局</div>
+                <div>技术支持：辽宁省地震局</div>
+                <div>地址：辽宁省沈阳市皇姑区黄河北大街44号</div>
+                <div style={{marginTop: '8px'}}>辽宁省地震局 版权所有</div>
+              </div>
+            </Sider>
+            <Content className="content">
+              <Switch>
+                {
+                  this.props.routes.map((item: RouteConfigProps) => {
+                    return (
+                      <SubRoute
+                        {...item}
+                        key={'tabPage_' + item.id}
+                        path={item.path}
+                        changePath={this.changePath.bind(this)}
+                      />
+                    )
+                  })
+                }
+              </Switch>
+            </Content>
+          </Layout>
+        </Layout>
+
     )
   }
 }

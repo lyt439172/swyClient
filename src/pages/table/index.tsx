@@ -1,54 +1,49 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Tag, Table, Space, Button } from 'antd';
-import './index.scss';
+import SearchForm from './compoments/SreachForm';
+import './style.scss';
 
 export default class Tables extends React.Component<RouteComponentProps> {
   
   columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: any) => <Button type="link">{text}</Button>,
+      title: '序号',
+      dataIndex: 'id',
+      key: 'id'
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: '故障原因',
+      dataIndex: 'reason',
+      key: 'reason',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: '故障位置',
+      dataIndex: 'position',
+      key: 'position',
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (tags: any) => (
-        <>
-          {tags.map((tag: string) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
+      title: '解决方案',
+      dataIndex: 'solution',
+      key: 'solution',
+    },
+    {
+      title: '处理状态',
+      key: 'status',
+      dataIndex: 'status',
+      render: (status: any) => (
+        <Tag color={status === 0 ? 'volcano' : 'green'}>
+          {status === 0 ? '未处理' : '已处理'}
+        </Tag>
       ),
     },
     {
-      title: 'Action',
+      title: '操作',
       key: 'action',
       render: (text: any, record: any) => (
         <Space size="middle">
-          <Button type="link">Invite {record.name}</Button>
-          <Button type="link">Delete</Button>
+          {record.status === 0 && <Button type="link">去处理</Button>}
+          <Button type="link">查看</Button>
         </Space>
       ),
     },
@@ -56,34 +51,33 @@ export default class Tables extends React.Component<RouteComponentProps> {
 
   state = {
     data: [
-      {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-      {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      },
-      {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      }
+      { id: 10001, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
+      { id: 10002, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
+      { id: 10003, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
+      { id: 10004, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
+      { id: 10005, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
+      { id: 10006, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
+      { id: 10007, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
+      { id: 10008, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
+      { id: 10009, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
+      { id: 10010, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
+      { id: 10012, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
+      { id: 10013, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
+      { id: 10011, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
+      { id: 10014, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
+      { id: 10015, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 }
     ]
   }
   
   render() {
     return (
       <div className="tables">
-        <Table columns={this.columns} dataSource={this.state.data} />
+        <SearchForm />
+        <Table 
+          columns={this.columns} 
+          size={'small'}
+          scroll={{ y: 240 }}
+          dataSource={this.state.data}  />
       </div>
     )
   }
