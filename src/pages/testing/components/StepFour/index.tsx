@@ -64,20 +64,18 @@ const StepFour = (props: any) => {
         </div>
     )
     return (
-        <div>
-            <Steps current={myCurrent} direction="vertical"  className="step-content">
-                <Step key={'4_1'} icon={<AimOutlined />} title="Step 1" description={descDom(1)} />
-                <Step key={'4_2'} icon={<AimOutlined />} title="Step 2" description={descDom(2)} />
-                <Step key={'4_3'} icon={<AimOutlined />} title="Step 3" description={descDom(3)} />
-                <Step key={'4_4'} icon={<AimOutlined />} title="Step 4" description={descDom(4)} />
-                <Step key={'4_5'} icon={<AimOutlined />} title="Step 5" description={descDom(5)} />
-                <Step key={'4_6'} icon={<AimOutlined />} title="Step 6" description={descDom(6)} />
-                <Step key={'4_7'} icon={<AimOutlined />} title="Step 7" description={descDom(7)} />
-                <Step key={'4_8'} icon={<AimOutlined />} title="Step 8" description={descDom(8)} />
-                <Step key={'4_9'} icon={<AimOutlined />} title="Step 9" description={descDom(9)} />
-                <Step key={'4_10'} icon={<AimOutlined />} title="Step 10" description={descDom(10)} />
-            </Steps>
-        </div>
+        <Steps current={myCurrent} direction="vertical"  className="step-content">
+            <Step key={'4_1'} icon={<AimOutlined />} title="Step 1" description={descDom(1)} />
+            <Step key={'4_2'} icon={<AimOutlined />} title="Step 2" description={descDom(2)} />
+            <Step key={'4_3'} icon={<AimOutlined />} title="Step 3" description={descDom(3)} />
+            <Step key={'4_4'} icon={<AimOutlined />} title="Step 4" description={descDom(4)} />
+            <Step key={'4_5'} icon={<AimOutlined />} title="Step 5" description={descDom(5)} />
+            <Step key={'4_6'} icon={<AimOutlined />} title="Step 6" description={descDom(6)} />
+            <Step key={'4_7'} icon={<AimOutlined />} title="Step 7" description={descDom(7)} />
+            <Step key={'4_8'} icon={<AimOutlined />} title="Step 8" description={descDom(8)} />
+            <Step key={'4_9'} icon={<AimOutlined />} title="Step 9" description={descDom(9)} />
+            <Step key={'4_10'} icon={<AimOutlined />} title="Step 10" description={descDom(10)} />
+        </Steps>
     )
 }
 

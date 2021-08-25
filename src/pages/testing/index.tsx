@@ -101,7 +101,7 @@ const Testing = (props: any) => {
           {...result}
         />
         :
-        <div>
+        <div style={{height: '100%'}}>
           <Steps current={current} size="small">
             {steps.map(item => (
               <Step key={item.title} title={item.title} />
