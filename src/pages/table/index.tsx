@@ -1,51 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import { RouteComponentProps } from 'react-router';
-import { Tag, Table, Space, Button, Modal, Form, Input, message } from 'antd';
+import { Tag, Table, Space, Button } from 'antd';
 import SearchForm from './compoments/SreachForm';
+import HandleModal from './compoments/HandleModal';
+import { representMap } from '../../common/commonData';
+import { 
+    getListData,
+    updateOneData,
+} from './http';
 import './style.scss';
 
-const mockData = [
-  { id: 10001, key: 10001, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
-  { id: 10002, key: 10002, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
-  { id: 10003, key: 10003, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
-  { id: 10004, key: 10004, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
-  { id: 10005, key: 10005, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
-  { id: 10006, key: 10006, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
-  { id: 10007, key: 10007, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
-  { id: 10008, key: 10008, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
-  { id: 10009, key: 10009, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
-  { id: 10010, key: 10010, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
-  { id: 10012, key: 10012, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
-  { id: 10013, key: 10013, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 },
-  { id: 10011, key: 10011, reason: '虚连', position: 'xx模块', solution: '', status: 0 },
-  { id: 10014, key: 10014, reason: '电源模块故障', position: 'xx模块', solution: '已更换电源模块', status: 1 },
-  { id: 10015, key: 10015, reason: '网络接口板故障', position: 'xx模块', solution: '', status: 0 }
-]
-
+interface singleDataProps {
+    id: number,
+    position?: string,
+    reason?: string,
+    represent?: number,
+    representExtra?: string,
+    solution?: string,
+    status?: number
+}
 
 const Tables = (props: any) => {
-    const [form] = Form.useForm();
-
     const [showHandleModal, setShowHandleModal] = useState(false);
-    const [currentRecordId, setCurrentRecordId] = useState(0);
+    const [currentRecord, setCurrentRecord] = useState<singleDataProps>({id: 0});
+    const [currentPage, setCurrentPage] = useState(1);
+    const [listData, setListData] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+
+    useEffect(() => {
+        queryListData(1);
+    }, [])
+
+    // 获取列表数据
+    const queryListData = (pageNo: number) => {
+        getListData(pageNo).then((response: any) => {
+            const { allCount = 0, data } = response.data.retobj;
+            const newList = data.map((item: any) => {
+                const {id, position, reason, represent, representExtra, solution, status} = item;
+                return {
+                    id,
+                    key: id,
+                    representDesc: represent > 0 ? representMap[represent] : representMap[represent] + representExtra,
+                    position, 
+                    reason, 
+                    solution, 
+                    status
+                }
+            });
+            setListData(newList)
+            setTotalCount(allCount)
+        })
+    }
+
+    // 更新解决方案
+    const updateSolution = (solution: string) => {
+        const newData = Object.assign({}, currentRecord, {solution, status: 1})
+        updateOneData(currentRecord.id, newData).then((response: any) => {
+            if(response.status === 200) {
+                queryListData(currentPage)
+            }
+        })
+    }
+
+    // 点击页码的处理
+    const onPageNoChange = (pageNo: number, psize?: number) => {
+        setCurrentPage(pageNo);
+        queryListData(pageNo);
+    }
 
     // 点击“去处理”
     const onHandleClick = (record: any) => {
-        setCurrentRecordId(record.id);
+        setCurrentRecord(record);
         setShowHandleModal(true)
-    }
-    // 去处理弹窗中，点击确定
-    const onHandleModalOkClick = () => {
-        const mySolution = form.getFieldValue('mySolution')
-        if(typeof(mySolution) === 'undefined') {
-            message.error('请填写解决方案');
-          } else {
-            console.log('----解决结果：', currentRecordId, mySolution)
-            // todo 请求接口更新数据
-            // 更新状态为已处理，更新解决方案
-            setShowHandleModal(false)
-          }
-        
     }
 
     const columns = [
@@ -56,8 +82,8 @@ const Tables = (props: any) => {
         },
         {
             title: '故障现象',
-            dataIndex: 'represent',
-            key: 'represent',
+            dataIndex: 'representDesc',
+            key: 'representDesc',
         },
         {
             title: '故障原因',
@@ -103,19 +129,18 @@ const Tables = (props: any) => {
                 columns={columns} 
                 size={'small'}
                 scroll={{ y: 300 }}
-                dataSource={mockData}  />
-            <Modal 
-                title="故障处理"
+                dataSource={listData}
+                pagination={{
+                    total:totalCount, 
+                    pageSize: 10,
+                    showSizeChanger: false,
+                    onChange: onPageNoChange
+                }}/>
+            <HandleModal 
                 visible={showHandleModal}
-                onOk={onHandleModalOkClick} 
-                onCancel={() => {setShowHandleModal(false)}} 
-                destroyOnClose={true} >
-                <Form form={form} preserve={false} >
-                    <Form.Item name="mySolution" label="解决方案：" required={true} >
-                        <Input placeholder="请输入解决方案" />
-                    </Form.Item>
-                </Form>
-            </Modal>
+                disVisable={() => setShowHandleModal(false)}
+                onOk={updateSolution}
+            />
         </div>
     )
 }

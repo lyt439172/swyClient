@@ -16,7 +16,7 @@ export interface AjaxOptions {
 axios.defaults.timeout = 15000;
 let tokens : Array<TokenProps> = [];
 let cancelToken = axios.CancelToken;
-const baseUrl = "https://";
+const baseUrl = "http://";
 
 let cancel = (token: any) => {
   let ind = tokens.findIndex(
