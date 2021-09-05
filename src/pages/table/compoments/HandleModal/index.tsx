@@ -15,8 +15,7 @@ const HandleModal = (props: any) => {
         if(typeof(mySolution) === 'undefined') {
             message.error('请填写解决方案');
           } else {
-            console.log('----解决结果：', mySolution)
-            // todo 请求接口更新数据
+            // 请求接口更新数据
             onOk(mySolution)
             // 更新状态为已处理，更新解决方案
             disVisable(false)

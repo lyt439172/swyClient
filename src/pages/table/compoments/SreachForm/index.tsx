@@ -6,16 +6,16 @@ import './style.scss';
 const { Item } = Form;
 const { Option } = Select;
 
-const SearchForm = () => {
+const SearchForm = (props: any) => {
     const [form] = Form.useForm();
   
     const onFinish = (values: any) => {
-      console.log('Received values of form: ', values);
+      props.onFinish(values)
     };
 
     const handleChange = (value: any) => {
-        console.log(`selected ${value}`);
-      }
+      console.log(`selected ${value}`);
+    }
 
     const children = [];
     for (let i = 0; i < representList.length; i++) {
@@ -32,9 +32,8 @@ const SearchForm = () => {
 
         <Row>
             <Col span={16}>
-                <Item name="selects" label="故障现象：" required={true} style={{marginBottom: 12}}>
+                <Item name="selects" label="故障现象：" style={{marginBottom: 12}}>
                     <Select
-                        mode="multiple"
                         allowClear
                         style={{ width: '100%' }}
                         placeholder="请选择故障现象"
@@ -47,7 +46,7 @@ const SearchForm = () => {
             <Col span={2} />
             <Col span={6} >
                 <Item name="status" label="处理状态：" style={{marginBottom: 12}}>
-                    <Select style={{width: '100%'}} onChange={handleChange}>
+                    <Select style={{width: '100%'}} onChange={handleChange} defaultValue={'all'}>
                         <Option value="all">全部</Option>
                         <Option value={0}>未处理</Option>
                         <Option value={1}>已处理</Option>

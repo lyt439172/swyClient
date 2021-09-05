@@ -1,25 +1,11 @@
 import { AjaxService } from '../../config/index';
 import { networkUrl } from '../../config/Network';
 
-const getListData = (pageNo: number) => {
+const getListData = (pageNo: number, searchData: any) => {
+  const dataString = JSON.stringify(searchData).length > 2 ? `&data=${JSON.stringify(searchData)}` : ''
   return AjaxService({
       method: 'GET',
-      url: `${networkUrl}/swyData?pg=${pageNo}`
-  })
-}
-
-const getOneData = (id: number) => {
-  return AjaxService({
-    method: 'GET',
-    url: `${networkUrl}/swyData/${id}`
-})
-}
-
-const addData = (data: any) => {
-  return AjaxService({
-    method: 'POST',
-    url: `${networkUrl}/swyData`,
-    data
+      url: `${networkUrl}/findData?pg=${pageNo}${dataString}`
   })
 }
 
@@ -31,9 +17,15 @@ const updateOneData = (id: number, data: any) => {
   })
 }
 
+// const searchData = (represent: string) => {
+//   return AjaxService({
+//     method: 'POST',
+//     url: `${networkUrl}/find`,
+//     data: {represent}
+//   })
+// }
+
 export {
   getListData,
-  getOneData,
-  addData,
-  updateOneData
+  updateOneData,
 }

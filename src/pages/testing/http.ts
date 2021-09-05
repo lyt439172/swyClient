@@ -1,12 +1,21 @@
-import { AjaxService, AjaxOptions } from '../../config';
+import { AjaxService } from '../../config/index';
+import { networkUrl } from '../../config/Network';
 
-export default {
-  getData(data: any) {
-    const options: AjaxOptions = {
-      method: 'get',
-      url: '',
-      data
-    }
-    return AjaxService(options)
-  }
+// const getOneData = (id: number) => {
+//   return AjaxService({
+//     method: 'GET',
+//     url: `${networkUrl}/swyData/${id}`
+//   })
+// }
+
+const addData = (data: any) => {
+  return AjaxService({
+    method: 'POST',
+    url: `${networkUrl}/swyData`,
+    data
+  })
+}
+
+export {
+  addData
 }

@@ -7,6 +7,7 @@ import { representMap } from '../../common/commonData';
 import { 
     getListData,
     updateOneData,
+    // searchData
 } from './http';
 import './style.scss';
 
@@ -26,6 +27,7 @@ const Tables = (props: any) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [listData, setListData] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
+    const [searchData, setSearchData] = useState<{represent?: number, status?: number}>({})
 
     useEffect(() => {
         queryListData(1);
@@ -33,8 +35,8 @@ const Tables = (props: any) => {
 
     // 获取列表数据
     const queryListData = (pageNo: number) => {
-        getListData(pageNo).then((response: any) => {
-            const { allCount = 0, data } = response.data.retobj;
+        getListData(pageNo, searchData).then((response: any) => {
+            const { allCount = 0, data = [] } = response.data.retobj;
             const newList = data.map((item: any) => {
                 const {id, position, reason, represent, representExtra, solution, status} = item;
                 return {
@@ -59,6 +61,29 @@ const Tables = (props: any) => {
             if(response.status === 200) {
                 queryListData(currentPage)
             }
+        })
+    }
+
+    // 点击“查询”的处理
+    const handleSearchClick = (value: any) => {
+        const search = {represent: value.selects, status: value.status === 'all' ? undefined : value.status}
+        setSearchData({...search})
+        getListData(1, search).then((response: any) => {
+            const { allCount = 0, data = [] } = response.data.retobj;
+            const newList = data.map((item: any) => {
+                const {id, position, reason, represent, representExtra, solution, status} = item;
+                return {
+                    id,
+                    key: id,
+                    representDesc: represent > 0 ? representMap[represent] : representMap[represent] + representExtra,
+                    position, 
+                    reason, 
+                    solution, 
+                    status
+                }
+            });
+            setListData(newList)
+            setTotalCount(allCount)
         })
     }
 
@@ -124,7 +149,7 @@ const Tables = (props: any) => {
 
     return (
         <div className="tables">
-            <SearchForm />
+            <SearchForm onFinish={handleSearchClick}/>
             <Table 
                 columns={columns} 
                 size={'small'}

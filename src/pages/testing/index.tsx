@@ -7,6 +7,7 @@ import StepThree from './components/StepThree';
 import StepFour from './components/StepFour';
 import StepFive from './components/StepFive';
 import { representList } from '../../common/commonData';
+import { addData } from './http';
 
 import './styles.scss';
 
@@ -35,9 +36,16 @@ const Testing = (props: any) => {
   };
 
   const onError = (reason: string, position: string = '') => {
-    console.log('errorInfo:', reason, position, represent)
     // todo 请求接口
-
+    const req = {
+      represent: represent.info,
+      representExtra: represent.extra || '',
+      reason,
+      position,
+      status: 0,
+      solution: ''
+    }
+    addData(req)
     // 请求成功后，流程终止
     setResult({status: 'warning', title: '故障已检出', subTitle: ''})
   }
